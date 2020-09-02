@@ -4,11 +4,9 @@ const bodyParse = require('body-parser');
 const mongoose = require('mongoose');
 const planetaRouter = require('./routes/planetaRouter');
 const index = require('../app/routes/index');
-// mongoose.Promise = global.Promise;
 
-
-// mongoose.connect("mongodb+srv://patricia:twPcJimuUMS74U8@cluster-b2w.ikn8i.mongodb.net/desafio-b2w", { useUnifiedTopology: true, useNewUrlParser: true});
-mongoose.connect("mongodb://localhost:27017/desafiob2w", { useUnifiedTopology: true, useNewUrlParser: true});
+// mongoose.connect("mongodb://localhost:27017/desafiob2w", { useUnifiedTopology: true, useNewUrlParser: true});
+mongoose.connect ("mongodb+srv://patricia:twPcJimuUMS74U8@cluster0.ikn8i.mongodb.net/Cluster0", { useUnifiedTopology: true, useNewUrlParser: true});
 
 let db = mongoose.connection;
 
