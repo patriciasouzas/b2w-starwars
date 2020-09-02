@@ -1,18 +1,17 @@
 const Planeta = require("../model/planetaSchema");
 const starWarsService = require('../services/starWarsService');
 
-// exports.post = (req, res) => {
 
-//     let planeta = new Planeta(req.body);
+exports.post = (req, res) => {
 
-//     planeta.save(function (error) {
-//         if (error)
-//             res.send('Erro ao tentar salvar o planeta' + error);
-//         res.json({ message: 'Planeta cadastrado com sucesso!' });
-//     });
+    let planeta = new Planeta(req.body);
 
-// };
-
+    planeta.save(function (error) {
+        if (error)
+            res.send('Erro ao tentar salvar o planeta' + error);
+        res.json({ message: 'Planeta cadastrado com sucesso!' });
+    });
+    
 exports.post = (req, res) => {
     const {name, climate, terrain} = req.body;
     const films = starWarsService.getPlanetsFilmsByName(name);
@@ -36,40 +35,46 @@ exports.get = async (req, res) => {
 
 };
 
+exports.getNome = async (req, res, next) => {
+    try {
+        const nome = req.params.nome
+        const response = await Planeta.findOne({ nome })
+        res.status(200).send(response)
+    } catch (e) {
+        return res.status(400).send({
+            mensagem: "Planeta não encontrado",
+            data: e
+        })
 
-// exports.put(function (req, res) {
+    }
+}
 
-//     //Primeiro: para atualizarmos, precisamos primeiro achar 'Id' do 'Planeta':
-//     Planeta.findById(req.params.planeta_id, function (error, planeta) {
-//         if (error)
-//             res.send("Id do planeta não encontrado....: " + error);
+exports.getByID = (req, res) => {
+    const planetaId = req.params.id
+    Planeta.findById(planetaId, function (err, planeta) {
+        if (err) return res.status(500).send(err)
+        if (!planeta) {
+            return res.status(200).send({ message: `Planeta  não encontrada` })
+        }
+        res.status(200).send(planeta)
+    })
 
-//         //Segundo: 
-//         planeta.nome = req.body.nome;
-//         planeta.clima = req.body.clima;
-//         planeta.terreno = req.body.terreno;
-//         planeta.id = req.body.id;
+}
 
-//         //Terceiro: Agora que já atualizamos os dados, vamos salvar as propriedades:
-//         planeta.save(function (error) {
-//             if (error)
-//                 res.send('Erro ao atualizar o planeta....: ' + error);
+exports.deletePlaneta = (req, res, next) => {
+    try {
+        const planetaId = req.params.id
+        console.log(planetaId)
+        const response = Planeta.findById(planetaId)
+        console.log(response)
+        response.remove(function (error) {
+            if (!error) {
+                res.status(200).send({ mensagem: `Planeta foi removido com sucesso ` })
+            }
+        })
 
-//             res.json({ message: 'planeta atualizado com sucesso!' });
-//         });
-//     });
-// });
+    } catch (error) {
+        return res.status(500).send({ mensagem: Error })
 
-// /* 5) Método: Excluir por Id (acessar: http://localhost:8000/api/planetas/:planeta_id) */
-// exports.delete(function (req, res) {
-
-//     Planeta.remove({
-//         _id: req.params.planeta_id
-//     }, function (error) {
-//         if (error)
-//             res.send("Id do planeta não encontrado....: " + error);
-
-//         res.json({ message: 'planeta excluído com Sucesso!' });
-//     });
-// });
-
+    }
+}
