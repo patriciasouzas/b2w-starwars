@@ -1,4 +1,5 @@
-const Planeta = require("../model/planetaSchema")
+const Planeta = require("../model/planetaSchema");
+const starWarsService = require('../services/starWarsService');
 
 // exports.post = (req, res) => {
 
@@ -13,22 +14,27 @@ const Planeta = require("../model/planetaSchema")
 // };
 
 exports.post = (req, res) => {
-    let planeta = new Planeta(req.body)
-    planeta.save()
+    const {name, climate, terrain} = req.body;
+    const films = starWarsService.getPlanetsFilmsByName(name);
+    const planet = new Planeta(req.body, films);
+    planet.save()
         .then(() => {
-            return res.status(201).send({
-                mensagem: "Planeta cadastrado com sucesso"
+            return res.status(201).json({
+                name: name,
+                climate: climate,
+                terrain: terrain,
+                films: films === 0 ? 'Não encontrado' : films.toString()
             })
         }).catch((err) => {
             return res.status(500).send(err)
         })
-}
+};
 
 exports.get = async (req, res) => {
     let planetas = await Planeta.find()
     res.status(200).send(planetas)
 
-}
+};
 
 
 // exports.put(function (req, res) {
