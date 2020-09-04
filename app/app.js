@@ -5,8 +5,7 @@ const mongoose = require('mongoose');
 const planetaRouter = require('./routes/planetaRouter');
 const index = require('../app/routes/index');
 
-// mongoose.connect("mongodb://localhost:27017/desafiob2w", { useUnifiedTopology: true, useNewUrlParser: true});
-mongoose.connect("mongodb+srv://patricia:twPcJimuUMS74U8@cluster0.ikn8i.mongodb.net/Cluster0", { useUnifiedTopology: true, useNewUrlParser: true});
+mongoose.connect("mongodb+srv://<username>:<password>@cluster0.ikn8i.mongodb.net/<dbname>", { useUnifiedTopology: true, useNewUrlParser: true});
 
 let db = mongoose.connection;
 
